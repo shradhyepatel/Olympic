@@ -1,4 +1,4 @@
-venv/
+venv
 athlete_events.csv
 noc_regions.csv
-__pycache__/
+__pycache__
