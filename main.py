@@ -68,8 +68,39 @@ elif opt == 'Country-Wise Analysis':
             st.dataframe(avg_weight)
 
     elif country != 'Overall' and year == 'Overall':
-        pass
-    
+       
+        st.subheader(country)
+        each_year , no_of_unique_players , times_country_participated , medal_graph ,sport_participation ,medal_sport_dristibution ,avg_weight ,avg_height , male_female_total = backend.country_selected_analysis(df , country)
+
+        col1 , col2 , col3 = st.columns(3)
+
+        with col1:
+            st.metric(label = 'No of unique players participated (Total)' , value = no_of_unique_players)
+
+        with col2:
+            st.metric(label = 'No of Times country participated' , value = times_country_participated)
+
+        with col3:
+            st.write('Male and Female participation (Total)')
+            st.dataframe(male_female_total)
+
+        st.subheader('No of athletes participated each year')
+        st.plotly_chart(each_year)
+
+        st.subheader('No of Medal')
+        st.plotly_chart(medal_graph)
+
+        st.subheader('{} participation in different sport'.format(country))
+        st.plotly_chart(sport_participation)
+
+        st.subheader('Medal from different sport')
+        st.plotly_chart(medal_sport_dristibution)
+
+        st.write('Average Height')
+        st.dataframe(avg_height)
+
+        st.write('Average Weight')
+        st.dataframe(avg_weight)
 
 elif opt == 'Sport-Wise Analysis':
     sport , country , year = backend.sport_list(df)
