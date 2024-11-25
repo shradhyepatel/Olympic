@@ -110,7 +110,34 @@ def overall_analysis(df):
         )
         
         return no_of_players , fig , top_10_chart , medals_graph
-    
+def year_selected_analysis(df , year):
+        
+        temp_df = df[df['Year'] == year]
+        temp_df.drop_duplicates(inplace= True)
+
+        no_of_player = temp_df['ID'].drop_duplicates().value_counts().sum()
+
+        total_country_participated = temp_df['region'].drop_duplicates().value_counts().sum()
+
+        male_female = temp_df['Sex'].value_counts()
+
+        medal_tally = unique(temp_df)
+        medal_tally = medal_tally.groupby('region').sum()[['Gold', 'Silver' , 'Bronze']].sort_values('Gold' , ascending = False ).reset_index()
+        medal_tally['Total'] = medal_tally['Gold'] + medal_tally['Silver'] + medal_tally['Bronze']
+
+        sport_dristibution = temp_df['Sport'].value_counts().reset_index()
+        sport_pie = px.pie(sport_dristibution , names = 'Sport' , values = 'count')
+        
+        avg = unique(temp_df)
+
+        avg_height = avg.groupby('Sex')['Height'].mean()
+
+        avg_weight = avg.groupby('Sex')['Weight'].mean()
+
+        return no_of_player , total_country_participated , male_female , medal_tally ,  sport_pie , avg_height , avg_weight
+
+
+
 
 
     
