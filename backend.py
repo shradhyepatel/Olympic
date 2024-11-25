@@ -169,7 +169,36 @@ def country_selected_analysis(df , country):
         return each_year , no_of_unique_players , times_country_participated , medal_graph ,sport_participation ,medal_sport_dristibution ,avg_weight ,avg_height , male_female_total 
      
 
+def country_year_selected_analysis(df , country , year):
+        
+        temp_df = df[(df['region'] == country) & (df['Year'] == year)] 
 
+        no_of_athelete_each_year = temp_df['Year'].value_counts().drop_duplicates().reset_index()
+        each_year = px.bar(no_of_athelete_each_year , x = 'Year' , y = 'count')
+
+        no_of_unique_players = temp_df['ID'].value_counts().shape[0]
+
+        times_country_participated = temp_df['Year'].value_counts().drop_duplicates().reset_index().shape[0]
+    
+        temp_dff = temp_df.drop_duplicates(['Team' , 	'NOC', 	'Games',	'Year',	'Season',	'City',	'Sport'	,'Event' ,	'Medal'])
+        medal_graph = temp_dff['Medal'].value_counts().reset_index()
+        medal_graph = px.bar(medal_graph , x = 'Medal' , y = 'count' , color = 'Medal')
+        
+        sport_participation = temp_df['Sport'].value_counts().reset_index()
+        sport_participation = px.pie(sport_participation , names = 'Sport' , values = 'count')
+
+        medal_sport_dristibution = temp_df.groupby('Medal')['Sport'].value_counts().reset_index()
+        medal_sport_dristibution = px.bar(medal_sport_dristibution , x = 'Sport' , y = 'count' , color = 'Medal')
+
+        temp = unique(temp_df)
+
+        avg_weight = temp.groupby('Sex')['Weight'].mean()
+
+        avg_height = temp.groupby('Sex')['Height'].mean()
+
+        male_female_total = temp['Sex'].value_counts()
+
+        return each_year , no_of_unique_players , times_country_participated , medal_graph ,sport_participation ,medal_sport_dristibution ,avg_weight ,avg_height , male_female_total 
 
 
 
