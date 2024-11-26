@@ -147,11 +147,9 @@ elif opt == 'Sport-Wise Analysis':
 
     if sport == 'Overall' and country == 'Overall' and year == 'Overall':
 
-     total_players_participated, total_no_of_games, no_of_males_females, games, players_dif_games, dff = backend.sport_overall_analysis(df)
+     total_players_participated, total_no_of_games, no_of_males_females, games, players_dif_games, dffff = backend.sport_overall_analysis(df)
     
      st.subheader('Overall Sport Analysis')
-
-
 
      col1, col2, col3 = st.columns(3)
      with col1:
@@ -171,11 +169,11 @@ elif opt == 'Sport-Wise Analysis':
      st.dataframe(players_dif_games, use_container_width=True, hide_index=True)
 
      st.subheader('Male and Female Participation Across Games')
-     st.plotly_chart(dff)
+     st.plotly_chart(dffff)
 
     elif sport == 'Overall' and country != 'Overall' and year == 'Overall':
      
-     total_players_participated, total_no_of_games, no_of_males_females, players_dif_games, dff, medal_sport_distributions = backend.sport_country_selected_analysis(df, country)
+     total_players_participated, total_no_of_games, no_of_males_females, players_dif_games, dfff, medal_sport_distributions = backend.sport_country_selected_analysis(df, country)
     
      st.subheader(f'Overall Sport Analysis of {country}')
 
@@ -195,14 +193,35 @@ elif opt == 'Sport-Wise Analysis':
      st.dataframe(players_dif_games, use_container_width=True, hide_index=True)
 
      st.subheader('No of males and females participated in Sports')
-     st.plotly_chart(dff)
+     st.plotly_chart(dfff)
 
      st.subheader('Medals dristibution betweeen the sports')
      st.plotly_chart(medal_sport_distributions)
 
-         
+    elif sport == "Overall" and country == 'Overall' and year != 'Overall':
+     no_of_playres , total_no_of_games , no_of_males_females ,players_dif_games , dff , medal= backend.sport_year_selected(df , year)
 
+     col1 , col2 , col3 = st.columns(3)
 
+     with col1 :
+       st.metric(label = 'Total Players' , value= no_of_playres)
+
+     with col2 :
+         st.metric(label= 'Total no of sporrts organised' , value= total_no_of_games)
+
+     with col3 :
+         st.subheader('Males and Females participated')
+         st.dataframe(no_of_males_females)
+
+     st.subheader('Players participation in different games')
+     st.dataframe(players_dif_games , use_container_width=True , hide_index=True)
+
+     st.subheader('No of males and females participated in Sports')
+     st.plotly_chart(dff)
+
+     st.subheader('Medal Dristbution')
+     st.dataframe(medal , hide_index=True)
+    
 
 
 elif opt == 'Athlete-Wise Analysis':

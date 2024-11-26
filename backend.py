@@ -239,7 +239,27 @@ def sport_country_selected_analysis(df , country):
         medal_sport_dristibutions = px.bar(medal_sport_dristibution , x = 'Sport' , y = 'Medal Count' , color = 'Medal')
 
 
-        return total_players_participated , total_no_of_games , no_of_males_females , players_dif_games , dff , medal_sport_dristibutions   
+        return total_players_participated , total_no_of_games , no_of_males_females , players_dif_games , dff , medal_sport_dristibutions
+
+def sport_year_selected(df , year):
+      
+      df = df[df['Year'] == year]  
+
+      no_of_playres = df['ID'].drop_duplicates().nunique()
+
+      total_no_of_games = df['Sport'].drop_duplicates().shape[0]
+
+      no_of_males_females = df.drop_duplicates(['ID'])['Sex'].value_counts()
+
+      players_dif_games = df.drop_duplicates(['ID' , 'Sport']).groupby('Sport')['ID'].nunique().sort_values(ascending = False).reset_index().rename(columns={'ID': 'No Of Players'})
+
+      dff = df.drop_duplicates(['ID' , 'Sport']).groupby(['Sport'])['Sex'].value_counts().reset_index()
+      dff = px.bar(dff , x = 'Sport' , y = 'count' , color= 'Sex')
+
+      medal = medals(df)
+
+      return no_of_playres , total_no_of_games , no_of_males_females ,players_dif_games , dff , medal 
+
          
     
 
