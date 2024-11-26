@@ -200,8 +200,47 @@ def country_year_selected_analysis(df , country , year):
 
         return each_year , no_of_unique_players , times_country_participated , medal_graph ,sport_participation ,medal_sport_dristibution ,avg_weight ,avg_height , male_female_total 
 
+def sport_overall_analysis(df):
+        
+      
+        total_players_participated = df['ID'].drop_duplicates().shape[0]
+
+        total_no_of_games = df['Sport'].drop_duplicates().shape[0]
+
+        no_of_males_females = df.drop_duplicates(['ID'])['Sex'].value_counts()
+
+        no_of_games_over_the_years = df.groupby('Year')['Sport'].nunique().reset_index()
+        games = px.bar(no_of_games_over_the_years , x = 'Year' , y = 'Sport')
+
+        players_dif_games = df.drop_duplicates(['ID' , 'Sport']).groupby('Sport')['ID'].nunique().sort_values(ascending = False).reset_index().rename(columns={'ID': 'No Of Players'})
+
+        dff = df.drop_duplicates(['ID' , 'Sport']).groupby(['Sport'])['Sex'].value_counts().reset_index().rename(columns={'count': 'No Of Players'})
+        dff = px.bar(dff , x = 'Sport' , y = 'No Of Players' , color= 'Sex')
+
+        return total_players_participated , total_no_of_games , no_of_males_females , games , players_dif_games , dff 
+
+def sport_country_selected_analysis(df , country):
+        
+        df = df[df['region'] == country]   
+
+        total_players_participated = df['ID'].drop_duplicates().shape[0]
+
+        total_no_of_games = df['Sport'].drop_duplicates().shape[0]
+
+        no_of_males_females = df.drop_duplicates(['ID'])['Sex'].value_counts()
+
+        players_dif_games = df.drop_duplicates(['ID' , 'Sport']).groupby('Sport')['ID'].nunique().sort_values(ascending = False).reset_index().rename(columns={'ID': 'No Of Players'})
+
+        dff = df.drop_duplicates(['ID' , 'Sport']).groupby(['Sport'])['Sex'].value_counts().reset_index()
+        dff = px.bar(dff , x = 'Sport' , y = 'count' , color= 'Sex')
+
+        df = df.drop_duplicates(['Team' , 	'NOC', 	'Games',	'Year',	'Season',	'City',	'Sport'	,'Event' ,	'Medal'])
+        medal_sport_dristibution = df.groupby('Medal')['Sport'].value_counts().reset_index().rename(columns={'count' : 'Medal Count'})
+        medal_sport_dristibutions = px.bar(medal_sport_dristibution , x = 'Sport' , y = 'Medal Count' , color = 'Medal')
 
 
+        return total_players_participated , total_no_of_games , no_of_males_females , players_dif_games , dff , medal_sport_dristibutions   
+         
     
 
 
