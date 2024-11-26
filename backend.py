@@ -260,6 +260,42 @@ def sport_year_selected(df , year):
 
       return no_of_playres , total_no_of_games , no_of_males_females ,players_dif_games , dff , medal 
 
+def sport_selected_only(df , sport):
+      
+      dff = df[df['Sport'] == sport]
+
+      no_of_players = dff['ID'].drop_duplicates().nunique()
+
+      no_of_males_females = dff.drop_duplicates(['ID'])['Sex'].value_counts()
+
+      no_of_country_participated = dff.drop_duplicates(['ID'])['region'].value_counts().shape[0]
+
+      x = dff.drop_duplicates(['ID'])['region'].value_counts().reset_index().rename(columns = {'count' : 'No Of Players'})
+      players_from_diff_country = px.bar( x , x = 'region' , y = 'No Of Players') 
+
+      avg_height = dff.groupby('Sex')['Height'].mean()
+
+      avg_weight = dff.groupby('Sex')['Weight'].mean()
+
+      overall_participation_age = dff.groupby('Sex')['Age'].mean()
+
+      xx = dff.drop_duplicates(['ID'])
+
+      filtered_data = xx[~xx['Medal'].isna()]
+      grouped = filtered_data.groupby(['Sex', 'Medal'])
+      avg_weight_of_winners = grouped['Weight'].mean()
+      avg_height_of_winners = grouped['Height'].mean()
+      avg_age_of_winners = grouped['Age'].mean()
+
+      filtered_data = dff.groupby('region')['Medal'].value_counts().reset_index()
+      filtered_data = px.bar(filtered_data , x = 'region' , y = 'count' , color='Medal')
+
+      no_of_players_over_the_years = dff.groupby('Year')['ID'].nunique().reset_index().rename(columns = {"ID" : 'Players'})
+      no_of_players_over_the_years = px.bar(no_of_players_over_the_years, x = 'Year' , y = 'Players')
+
+      return no_of_players , no_of_males_females , no_of_country_participated , players_from_diff_country , avg_height , avg_weight , overall_participation_age , avg_weight_of_winners ,avg_height_of_winners ,avg_age_of_winners , filtered_data , no_of_players_over_the_years
+
+
          
     
 
