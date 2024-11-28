@@ -295,7 +295,35 @@ def sport_selected_only(df , sport):
 
       return no_of_players , no_of_males_females , no_of_country_participated , players_from_diff_country , avg_height , avg_weight , overall_participation_age , avg_weight_of_winners ,avg_height_of_winners ,avg_age_of_winners , filtered_data , no_of_players_over_the_years
 
+def sport_and_country_selected(df , sport , country):
+      
+      temp_df = df[(df['Sport'] == sport) & (df['region'] == country)]
 
+      no_of_unique_players = temp_df['ID'].drop_duplicates().nunique()
+
+      no_of_times_country_participated = temp_df['Year'].nunique()
+
+      no_of_males_females = temp_df.drop_duplicates(['ID'])['Sex'].value_counts()
+
+      graph = temp_df.groupby('Year')['Sex'].value_counts().reset_index()
+      graph_males_females_total = px.line(graph , x = 'Year' , y = 'count' , color = 'Sex')
+
+      temp_dff = temp_df.drop_duplicates(['Team' , 	'NOC', 	'Games',	'Year',	'Season',	'City',	'Sport'	,'Event' ,	'Medal'])
+      temp = temp_dff.groupby('Medal')['Sex'].value_counts()
+
+      avg_age = temp_df.drop_duplicates('ID').groupby('Sex')['Age'].mean()
+
+      avg_height = temp_df.drop_duplicates('ID').groupby('Sex')['Height'].mean()
+
+      avg_weight = temp_df.drop_duplicates('ID').groupby('Sex')['Weight'].mean()
+
+      
+      grouped = temp_df.groupby(['Medal' , 'Sex'])
+      avg_weight_of_winners = grouped['Weight'].mean()
+      avg_height_of_winners = grouped['Height'].mean()
+      avg_age_of_winners = grouped['Age'].mean()
+
+      return no_of_unique_players , no_of_times_country_participated , no_of_males_females , graph_males_females_total , temp , avg_age , avg_height , avg_weight , avg_height_of_winners , avg_weight_of_winners , avg_age_of_winners
          
     
 
