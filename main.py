@@ -360,6 +360,111 @@ elif opt == 'Sport-Wise Analysis':
              st.write('Average weight of Males and Females')
              st.dataframe(avg_weight_of_winners)
 
+    elif sport != 'Overall' and country == 'Overall' and year != 'Overall':
+
+         no_of_unique , no_of_country , no_of_males_females , male_female_graph , avg_age , avg_height , avg_weight , avg_age_medal , avg_height_medal , avg_weight_medal = backend.sport_and_year_selected(df, sport , year )
+
+         col1 , col2 , col3 = st.columns(3)
+
+         with col1 :
+              st.metric(label= 'Total players participated' , value= no_of_unique)
+
+         with col2 :
+              st.metric(label='Number of countries participated' , value= no_of_country)
+        
+         with col3 :
+              st.write('Total males and females participated')
+              st.dataframe(no_of_males_females)
+
+         st.subheader('Males and female participation from different countries')
+         st.plotly_chart(male_female_graph)
+
+         st.subheader('Analysis of all players participated')
+         col1 , col2 , col3 = st.columns(3)
+
+         with col1 :
+              st.write('Average age of athelete')
+              st.dataframe(avg_age)
+
+         with col2 :
+              st.write('Average hight of athelets')
+              st.dataframe(avg_height)
+        
+         with col3 :
+              st.write('Average weight of athelets')
+              st.dataframe(avg_height)
+
+         st.subheader('Analysis of medal winners')
+         col1 , col2 , col3 = st.columns(3)
+
+         with col1 :
+              st.write('Average age of athelete')
+              st.dataframe(avg_age_medal)
+
+         with col2 :
+              st.write('Average hight of athelets')
+              st.dataframe(avg_height_medal)
+        
+         with col3 :
+              st.write('Average weight of athelets')
+              st.dataframe(avg_weight_medal)
+
+    else :
+         no_of_unique , no_of_males_females , no_of_diff_event , events_dataframe , avg_age , avg_height , avg_weight , avg_age_medal , avg_height_medal , avg_weight_medal , medal_tally = backend.sport_all_selected(df , sport , country , year )
+
+         col1 , col2 , col3 = st.columns(3)
+
+         with col1 :
+              st.metric(label= 'Total no of players' , value= no_of_unique)
+
+         with col2 :
+              st.metric(label= 'No of different event' , value= no_of_diff_event)
+
+         with col3 :
+              st.write('Total males and females participated')
+              st.dataframe(no_of_males_females)
+
+         st.subheader('Events')
+         st.dataframe(events_dataframe , use_container_width=True , hide_index= True)
+
+         st.header('Analysis of all players')
+
+         col1 , col2 , col3 = st.columns(3)
+
+         with col1:
+              st.write('Average age of athelets')
+              st.dataframe(avg_age)
+
+         with col2:
+              st.write('Agerage height all athelets')
+              st.dataframe(avg_height)
+
+         with col3:
+              st.write('Average weight of athelets')
+              st.dataframe(avg_weight)
+
+         st.header('Analysis of medal winners')
+
+         col1 , col2 , col3 = st.columns(3)
+
+         with col1:
+              st.write('Average age of athelets')
+              st.dataframe(avg_age_medal)
+
+         with col2:
+              st.write('Agerage height all athelets')
+              st.dataframe(avg_height_medal)
+
+         with col3:
+              st.write('Average weight of athelets')
+              st.dataframe(avg_weight_medal)
+
+         st.header('Medal Tally')
+         st.dataframe(medal_tally)
+
+
+
+
 
 elif opt == 'Athlete-Wise Analysis':
     name, year = backend.athlete_list(df)

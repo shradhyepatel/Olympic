@@ -325,8 +325,69 @@ def sport_and_country_selected(df , sport , country):
 
       return no_of_unique_players , no_of_times_country_participated , no_of_males_females , graph_males_females_total , temp , avg_age , avg_height , avg_weight , avg_height_of_winners , avg_weight_of_winners , avg_age_of_winners
          
-    
+def sport_and_year_selected(df , sport , year):
 
+      temp_df = df[(df['Sport'] == sport) & (df['Year'] == year)] 
+
+      no_of_unique = temp_df['ID'].drop_duplicates().nunique()
+
+      no_of_country = temp_df['region'].nunique()
+
+      no_of_males_females = temp_df.drop_duplicates(['ID'])['Sex'].value_counts()
+
+      graph = temp_df.drop_duplicates('ID').groupby('region')['Sex'].value_counts().reset_index()
+      male_female_graph = px.bar(graph , x = 'region' , y = 'count' , color = 'Sex')  
+
+      overall_analysis = temp_df.drop_duplicates('ID').groupby('Sex')
+
+      avg_age = overall_analysis['Age'].mean()
+
+      avg_hight = overall_analysis['Height'].mean()
+
+      avg_weight = overall_analysis['Weight'].mean()
+
+      overall_medal_analysis = temp_df.drop_duplicates('ID').groupby(['Medal' , 'Sex'])
+
+      avg_age_medal = overall_medal_analysis['Age'].mean()
+
+      avg_height_medal = overall_medal_analysis['Height'].mean()
+
+      avg_weight_medal = overall_medal_analysis['Weight'].mean()
+
+      return no_of_unique , no_of_country , no_of_males_females , male_female_graph , avg_age , avg_hight , avg_weight , avg_age_medal , avg_height_medal , avg_weight_medal
+
+def sport_all_selected(df , sport , country , year):
+      
+      temp_df = df[(df['Sport'] == sport) & (df['Year'] == year ) & (df['region'] == country)]
+
+      no_of_unique = temp_df['ID'].drop_duplicates().nunique()
+
+      no_of_males_females = temp_df.drop_duplicates(['ID'])['Sex'].value_counts()
+
+      no_of_diff_event = temp_df['Event'].nunique()
+
+      events_dataframe = temp_df.drop_duplicates('ID').groupby('Event')['Sex'].value_counts().reset_index()
+
+      overall_analysis = temp_df.drop_duplicates('ID').groupby('Sex')
+
+      avg_age = overall_analysis['Age'].mean()
+
+      avg_height = overall_analysis['Height'].mean()
+
+      avg_weight = overall_analysis['Weight'].mean()
+
+      overall_medal_analysis = temp_df.drop_duplicates('ID').groupby(['Medal' , 'Sex'])
+
+      avg_age_medal = overall_medal_analysis['Age'].mean()
+
+      avg_height_medal = overall_medal_analysis['Height'].mean()
+
+      avg_weight_medal = overall_medal_analysis['Weight'].mean()
+
+      temp_dff = temp_df.drop_duplicates(['Team' , 	'NOC', 	'Games',	'Year',	'Season',	'City',	'Sport'	,'Event' ,	'Medal'])
+      medal_tally = temp_dff[~temp_dff['Medal'].isna()]['Medal'].value_counts()
+
+      return no_of_unique , no_of_males_females , no_of_diff_event , events_dataframe , avg_age , avg_height , avg_weight , avg_age_medal , avg_height_medal , avg_weight_medal , medal_tally
 
 
 
