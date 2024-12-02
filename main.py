@@ -8,7 +8,7 @@ import backend
 df = preprocess.initialize()
 
 st.sidebar.title('Olympics Analysis')
-opt = st.sidebar.radio('Select An Option' , ['Medal Tally' , 'Country-Wise Analysis' , 'Sport-Wise Analysis' , 'Athlete-Wise Analysis' , 'Gender-Wise Analysis'])
+opt = st.sidebar.radio('Select An Option' , ['Medal Tally' , 'Country-Wise Analysis' , 'Sport-Wise Analysis' , 'Gender-Wise Analysis'])
 
 if opt == 'Medal Tally':
      st.title('Medal Tally')
@@ -464,12 +464,72 @@ elif opt == 'Sport-Wise Analysis':
 
 
 elif opt == 'Gender-Wise Analysis':
-    sport , country = backend.gender_list(df)
-    st.title('Gender-Wise Analysis')
+     sport , country = backend.gender_list(df)
+     st.title('Gender-Wise Analysis')
 
-    st.sidebar.selectbox('Select a Gender' , ['Both' , 'Male' , 'Female'])
-    st.sidebar.selectbox('Select a Sport' , sport)
-    st.sidebar.selectbox('Select a Country' , country)
+     gender = st.sidebar.selectbox('Select a Gender' , ['Both' , 'Male' , 'Female'])
+     sport = st.sidebar.selectbox('Select a Sport' , sport)
+     country = st.sidebar.selectbox('Select a Country' , country)
+
+
+     if gender == 'Both' and sport == 'Overall'  and country == 'Overall' :
+       
+       no_of_total_playrs , total_country_participated , males_and_females ,males_females_year_by_year_graph , players_sport_dristribution ,graph_over_the_years , avg_age , avg_height , avg_weight , medal_avg_age , medal_avg_height , medal_avg_weight = backend.gender_overall_analysis(df)
+
+       col1 , col2 , col3 = st.columns(3)
+
+       with col1:
+            st.metric(label='Total players participated' , value=no_of_total_playrs)
+     
+       with col2 :
+            st.metric(label='Total countries participated' , value= total_country_participated)
+
+       with col3:
+            st.write('No of males and females participated')
+            st.dataframe(males_and_females)
+
+       st.subheader('Males and Females year by year (Summer)')
+       st.plotly_chart(males_females_year_by_year_graph)
+
+       st.subheader('Players sport distribution')
+       st.plotly_chart(players_sport_dristribution)
+
+       st.subheader('No of players from all the participated countries')
+       st.plotly_chart(graph_over_the_years)
+
+
+       st.subheader('Analysis of all players')
+       col1 , col2 , col3 = st.columns(3)
+
+       with col1 :
+            st.write('Average age of both genders')
+            st.dataframe(avg_age)
+
+       with col2 :
+            st.write('Avgerage hight of both genders')
+            st.dataframe(avg_height)
+
+       with col3 :
+            st.write('Average weight of both genders')
+            st.dataframe(avg_weight)
+
+       st.subheader('Analysis of medal winners')
+       col1 , col2 , col3 = st.columns(3)
+
+       with col1 :
+            st.write('Average age of both genders')
+            st.dataframe(medal_avg_age)
+
+       with col2 :
+            st.write('Avgerage hight of both genders')
+            st.dataframe(medal_avg_height)
+
+       with col3 :
+            st.write('Average weight of both genders')
+            st.dataframe(medal_avg_weight)
+
+      
+            
 
 
 

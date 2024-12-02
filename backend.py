@@ -380,4 +380,39 @@ def sport_all_selected(df , sport , country , year):
       return no_of_unique , no_of_males_females , no_of_diff_event , events_dataframe , avg_age , avg_height , avg_weight , avg_age_medal , avg_height_medal , avg_weight_medal , medal_tally
 
 
+def gender_overall_analysis(df):
+    no_of_total_playrs = df.drop_duplicates('ID')['ID'].nunique()
 
+    total_country_participated = df.drop_duplicates('region')['region'].nunique()
+
+    males_and_females = df.drop_duplicates('ID')['Sex'].value_counts()
+
+    dff = df[df['Season'] == 'Summer']
+    x = dff.drop_duplicates('ID').groupby('Year')['Sex'].value_counts().reset_index()
+    males_females_year_by_year_graph = px.line(x , x = 'Year' , y = 'count' , color = 'Sex' )
+
+    players_sport_dristribution = df.drop_duplicates('ID').groupby('Sport')['ID'].nunique().reset_index()
+    players_sport_dristribution  = px.bar(players_sport_dristribution , x = 'Sport' , y = 'ID')
+
+    x = dff.drop_duplicates('ID').groupby(['Year' , 'region'])['ID'].nunique().reset_index()
+    graph_over_the_years = px.line(x  , x = 'Year' , y = 'ID' , color = 'region')
+
+    grouped = df.drop_duplicates('ID').groupby('Sex')
+    
+    avg_age = grouped['Age'].mean()
+
+    avg_hight = grouped['Height'].mean()
+
+    avg_weight = grouped['Weight'].mean()
+
+    medal_grouped = df[~df['Medal'].isna()]
+
+    medal_grouped = medal_grouped.drop_duplicates('ID').groupby(['Medal' , 'Sex'])
+
+    medal_avg_age  = medal_grouped['Age'].mean()
+
+    medal_avg_height = medal_grouped['Height'].mean()
+
+    medal_avg_weight = medal_grouped['Weight'].mean()
+
+    return no_of_total_playrs , total_country_participated , males_and_females ,males_females_year_by_year_graph , players_sport_dristribution ,graph_over_the_years , avg_age , avg_hight , avg_weight , medal_avg_age , medal_avg_height , medal_avg_weight
