@@ -463,16 +463,6 @@ elif opt == 'Sport-Wise Analysis':
          st.dataframe(medal_tally)
 
 
-
-
-
-elif opt == 'Athlete-Wise Analysis':
-    name, year = backend.athlete_list(df)
-    st.title('Athlete-Wise Analysis')
-
-    st.sidebar.selectbox('Select a Sport' , name)
-    st.sidebar.selectbox('Select a Year' , year)
-
 elif opt == 'Gender-Wise Analysis':
     sport , country = backend.gender_list(df)
     st.title('Gender-Wise Analysis')

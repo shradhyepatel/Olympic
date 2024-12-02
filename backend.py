@@ -43,16 +43,6 @@ def sport_list(df):
 
     return sport , country , year
 
-def athlete_list(df):
-    name = df['Name'].dropna().unique().tolist()
-    name.sort()
-    name.insert(0,'Overall')
-
-    year = np.unique(df['Year'].dropna()).tolist()
-    year.sort()
-    year.insert(0,'Overall')
-
-    return name , year
 
 def gender_list(df):
     sport = np.unique(df['Sport'].dropna()).tolist()
