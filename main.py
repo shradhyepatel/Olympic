@@ -497,7 +497,6 @@ elif opt == 'Gender-Wise Analysis':
        st.subheader('No of players from all the participated countries')
        st.plotly_chart(graph_over_the_years)
 
-
        st.subheader('Analysis of all players')
        col1 , col2 , col3 = st.columns(3)
 
@@ -527,6 +526,79 @@ elif opt == 'Gender-Wise Analysis':
        with col3 :
             st.write('Average weight of both genders')
             st.dataframe(medal_avg_weight)
+
+
+     elif gender == 'Both' and sport == 'Overall'  and  country != 'Overall':
+
+          total_players , total_games , males_females_count , every_year_graph_summer , every_year_graph_winter , avg_age ,  avg_height , avg_weight , medal_avg_age , medal_avg_height , medal_avg_weight = backend.gender_country_selected(df , country)
+          option = backend.sport_list_in(df , country)
+
+          col1 , col2 , col3 = st.columns(3)
+
+          with col1 :
+               st.metric(label= 'Total players participated' , value= total_players)
+
+          with col2 :
+               st.metric(label='Total Games Played' , value= total_games)
+
+          with col3:
+               st.write('Total males and females')
+               st.dataframe(males_females_count)
+
+          st.subheader('Males and females participation (Summer)')
+          st.plotly_chart(every_year_graph_summer)
+
+          st.subheader('Males and females participation (Winter)')
+          st.plotly_chart(every_year_graph_winter)
+
+          col1 , col2 , col3 = st.columns(3)
+
+          with col1:
+            responce = st.selectbox( 'Select a sport' , option)
+
+          graph = backend.sport_graph_in(df ,country , responce)
+
+          st.plotly_chart(graph)
+
+          st.subheader('Analysis of all players')
+
+          col1 , col2 , col3 = st.columns(3)
+
+          with col1 :
+               st.write('Average age')
+               st.dataframe(avg_age)
+
+          with col2 :
+               st.write('Average height')
+               st.dataframe(avg_height)
+
+          with col3 :
+               st.write('Average weight')
+               st.dataframe(avg_weight)
+
+          st.subheader('Analysis of medal winners')
+
+          col1 , col2 , col3 = st.columns(3)
+
+          with col1 :
+               st.write('Average age')
+               st.dataframe(medal_avg_age)
+
+          with col2 :
+               st.write('Average height')
+               st.dataframe(medal_avg_height)
+
+          with col3 :
+               st.write('Average weight')
+               st.dataframe(medal_avg_weight)
+               
+
+          
+
+
+           
+
+
 
       
             

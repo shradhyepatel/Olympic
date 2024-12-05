@@ -106,7 +106,7 @@ def year_selected_analysis(df , year):
         temp_df = df[df['Year'] == year]
         temp_df.drop_duplicates(inplace= True)
 
-        no_of_player = temp_df['ID'].drop_duplicates().value_counts().sum()
+        no_of_player = temp_df.drop_duplicates('ID')['ID'].value_counts().sum()
 
         total_country_participated = temp_df['region'].drop_duplicates().value_counts().sum()
 
@@ -398,7 +398,7 @@ def gender_overall_analysis(df):
     graph_over_the_years = px.line(x  , x = 'Year' , y = 'ID' , color = 'region')
 
     grouped = df.drop_duplicates('ID').groupby('Sex')
-    
+
     avg_age = grouped['Age'].mean()
 
     avg_hight = grouped['Height'].mean()
@@ -409,10 +409,63 @@ def gender_overall_analysis(df):
 
     medal_grouped = medal_grouped.drop_duplicates('ID').groupby(['Medal' , 'Sex'])
 
-    medal_avg_age  = medal_grouped['Age'].mean()
+    medal_avg_age = medal_grouped['Age'].mean()
 
     medal_avg_height = medal_grouped['Height'].mean()
 
     medal_avg_weight = medal_grouped['Weight'].mean()
 
     return no_of_total_playrs , total_country_participated , males_and_females ,males_females_year_by_year_graph , players_sport_dristribution ,graph_over_the_years , avg_age , avg_hight , avg_weight , medal_avg_age , medal_avg_height , medal_avg_weight
+
+def gender_country_selected(df  , country):
+      
+      temp_df = df[df['region'] == country]
+
+      total_players = temp_df.drop_duplicates('ID')['ID'].nunique()
+
+      total_games = temp_df['Sport'].nunique()
+
+      males_females_count = temp_df.drop_duplicates('ID').groupby('Sex')['Sex'].value_counts()
+
+      temp_dff = temp_df[temp_df['Season'] == 'Summer']
+      every_year = temp_dff.drop_duplicates('ID').groupby(['Year' , 'Sex'])['Sex'].value_counts().reset_index()
+      every_year_graph_summer = px.line(every_year , x = 'Year' , y = 'count' , color = 'Sex')
+
+      temp_dff = temp_df[temp_df['Season'] == 'Winter']
+      every_year = temp_dff.drop_duplicates('ID').groupby(['Year' , 'Sex'])['Sex'].value_counts().reset_index()
+      every_year_graph_winter = px.line(every_year , x = 'Year' , y = 'count' , color = 'Sex')
+
+      all_filtered = temp_df.drop_duplicates('ID').groupby('Sex')
+
+      avg_age = all_filtered['Age'].mean()
+
+      avg_height = all_filtered['Height'].mean()
+
+      avg_weight = all_filtered['Weight'].mean()
+
+      medal_grouped = df[~df['Medal'].isna()]
+      medal_grouped = medal_grouped.drop_duplicates('ID').groupby('Sex')
+
+      medal_avg_age  = medal_grouped['Age'].mean()
+
+      medal_avg_height = medal_grouped['Height'].mean()
+
+      medal_avg_weight = medal_grouped['Weight'].mean()
+
+      return total_players , total_games , males_females_count , every_year_graph_summer , every_year_graph_winter , avg_age ,  avg_height , avg_weight , medal_avg_age , medal_avg_height , medal_avg_weight
+
+def sport_graph_in(df , country , sportt):
+      temp_df = df[df['region'] == country]
+
+      sport_df = temp_df[temp_df['Sport'] == sportt].drop_duplicates('ID')
+      sport_df = sport_df.groupby(['Year' , 'Sex'])['Sex'].value_counts().reset_index()
+      sport_df_graph = px.line(sport_df , x = 'Year' , y = 'count' , color = 'Sex')
+
+      return sport_df_graph
+
+def sport_list_in(df , country):
+        temp_df = df[df['region'] == 'USA']
+        sport = sorted(temp_df['Sport'].dropna().unique().tolist())
+
+        return sport
+
