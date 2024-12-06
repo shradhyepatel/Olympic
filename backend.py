@@ -464,8 +464,50 @@ def sport_graph_in(df , country , sportt):
       return sport_df_graph
 
 def sport_list_in(df , country):
-        temp_df = df[df['region'] == 'USA']
+        temp_df = df[df['region'] == country]
+
         sport = sorted(temp_df['Sport'].dropna().unique().tolist())
 
         return sport
+
+def gender_sport_selected(df , sport):
+      temp_df = df[df['Sport'] == sport]
+
+      total_players_unique = temp_df.drop_duplicates('ID').shape[0]
+
+      total_countries = temp_df['region'].nunique()
+
+      total_males_females = temp_df.drop_duplicates('ID')['Sex'].value_counts()
+
+      temp_dff = temp_df[temp_df['Season'] == 'Summer']
+      x = temp_dff.drop_duplicates('ID').groupby('Year')['Sex'].value_counts().reset_index()
+      year_by_year_graph_summer = px.line(x , x = 'Year' , y = 'count' , color = 'Sex')
+
+      temp_dff = temp_df[temp_df['Season'] == 'Winter']
+      x = temp_dff.drop_duplicates('ID').groupby('Year')['Sex'].value_counts().reset_index()
+      year_by_year_graph_winter= px.line(x , x = 'Year' , y = 'count' , color = 'Sex')
+
+      x = temp_df.drop_duplicates('ID').groupby('Year')['region'].nunique().reset_index()
+      country_participation_graph = px.bar(x , x = 'Year' , y = 'region') 
+
+      x = temp_df.drop_duplicates('ID')['region'].value_counts().reset_index().head(30)
+      pie_graph = px.pie(x , names = 'region' , values= 'count')
+
+      filtered = temp_df.drop_duplicates('ID').groupby('Sex')
+
+      avg_age = filtered['Age'].mean()
+
+      avg_height = filtered['Height'].mean()
+
+      avg_weight = filtered['Weight'].mean()
+
+      medal_filtered = temp_df.drop_duplicates('ID').groupby(['Medal' , 'Sex'])
+
+      medal_avg_age = medal_filtered['Age'].mean()
+
+      medal_avg_height = medal_filtered['Height'].mean()
+
+      medal_avg_weight = medal_filtered['Weight'].mean()
+
+      return total_players_unique , total_countries , total_males_females , year_by_year_graph_summer , year_by_year_graph_winter , country_participation_graph , pie_graph ,  avg_age , avg_height , avg_weight , medal_avg_age , medal_avg_height , medal_avg_weight
 
