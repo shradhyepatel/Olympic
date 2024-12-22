@@ -511,3 +511,34 @@ def gender_sport_selected(df , sport):
 
       return total_players_unique , total_countries , total_males_females , year_by_year_graph_summer , year_by_year_graph_winter , country_participation_graph , pie_graph ,  avg_age , avg_height , avg_weight , medal_avg_age , medal_avg_height , medal_avg_weight
 
+def gender_sport_country_selected(df , sport , country ):
+      
+      temp_df = df[(df['Sport'] == sport) & (df['region'] == country)]
+
+      total_players = temp_df.drop_duplicates('ID').shape[0]
+
+      no_of_years_participated = temp_df['Year'].nunique()
+
+      total_males_females = temp_df.drop_duplicates('ID')['Sex'].value_counts()
+
+      x = temp_df.groupby(['Year' , 'Sex'])['Sex'].value_counts().reset_index()
+      male_female_participation_graph = px.line( x , x = 'Year' , y = 'count' , color = 'Sex')
+
+      temp = temp_df.drop_duplicates('ID').groupby('Sex')
+
+      avg_hight = temp['Height'].mean()
+
+      avg_weight = temp['Weight'].mean()
+
+      avg_age = temp['Age'].mean()
+
+      win = temp_df[~temp_df['Medal'].isna()]
+      win = win.groupby(['Medal' , 'Sex'])
+ 
+      win_height = win['Height'].mean()
+
+      win_weight = win['Weight'].mean()
+
+      win_age = win['Age'].mean()
+
+      return total_players , no_of_years_participated , total_males_females ,male_female_participation_graph , avg_age , avg_hight, avg_weight , win_age , win_height , win_weight

@@ -650,7 +650,55 @@ elif opt == 'Gender-Wise Analysis':
 
           with col3 :
                st.write('Average weight')
-               st.dataframe(medal_avg_weight)               
+               st.dataframe(medal_avg_weight)  
+
+     elif gender == 'Both' and country != 'Overall' and sport != 'Overall':
+
+       total_players , no_of_years_participated , total_males_females ,male_female_participation_graph , avg_age , avg_height, avg_weight , win_age , win_height , win_weight =  backend.gender_sport_country_selected(df , sport , country)
+
+       col1 , col2 , col3 = st.columns(3)
+
+       with col1 :
+               st.metric(label= 'Total players participated' , value= total_players)
+
+       with col2 :
+               st.metric(label = 'No of Times Participated' , value= no_of_years_participated)
+
+       with col3 :
+               st.write('Total males and females participated')
+               st.dataframe(total_males_females)      
+
+       st.subheader('Male and Female Participation')
+       st.plotly_chart(male_female_participation_graph)
+
+       col1 , col2 , col3 = st.columns(3)
+
+       with col1 :
+            st.write('Average age of all participated palyers')
+            st.dataframe(avg_age)
+
+       with col2 :
+            st.write('Average hight of all participated palyers')
+            st.dataframe(avg_height)
+    
+       with col3 :
+            st.write('Average weight of all participated palyers')
+            st.dataframe(avg_weight)
+
+
+       col1 , col2 , col3 = st.columns(3)
+
+       with col1 :
+            st.write('Average age of medal winners')
+            st.dataframe(win_age)
+
+       with col2 :
+            st.write('Average hight of medal winners')
+            st.dataframe(win_height)
+    
+       with col3 :
+            st.write('Average weight of medal winners')
+            st.dataframe(win_weight)
                                
                  
                  
